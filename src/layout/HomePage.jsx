@@ -34,7 +34,7 @@ export const HomePage = () => {
                     className='sider'
                     style={{
                         backgroundColor: '#6c584c',
-                        position: '',
+                        
                         display: 'flex', alignItems: 'center', justifyContent: 'center'
 
                     }}
