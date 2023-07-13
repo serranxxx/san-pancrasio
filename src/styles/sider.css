@@ -8,3 +8,14 @@
     transform: translateY(0px);
     transition: all 0.35s ease-in-out;
 }
+
+.button:hover {
+    transform: translateY(-5px);
+    transition: all 0.35s ease-in-out;
+    /* color: #adc178 !important; */
+}
+
+.button {
+    transform: translateY(0px);
+    transition: all 0.35s ease-in-out;
+}

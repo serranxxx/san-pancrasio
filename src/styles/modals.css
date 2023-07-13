@@ -1,0 +1,18 @@
+/* Modificar el color de fondo del modal */
+.add-item .ant-modal-content {
+    background-color: #f7fcf5 !important;
+    border-radius: 3vh !important;
+    margin-top: 5vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* height: 41vh;
+    width: 100vh; */
+  
+  }
+  
+  /* Modificar el color del botón de cierre del modal */
+  .add-item .ant-modal-close-x {
+    color: #6c584c;
+  }
+  

@@ -1,0 +1,20 @@
+/* Scroll vertical */
+
+/* Estilos del scroll */
+.my-table-2- .ant-table-body::-webkit-scrollbar {
+    width: 12px;
+    /* Ancho del scroll */
+    height: 12px;
+}
+
+.my-table-2- .ant-table-body::-webkit-scrollbar-thumb {
+    background-color: #dcd7c3;
+    /* Color del scroll */
+    /* border-color: #000; */
+}
+
+.my-table-2- .ant-table-body::-webkit-scrollbar-track {
+    background: #eee !important;
+    /* border: 0px solid #000 */
+        /* Color de fondo de la pista de la barra de desplazamiento */
+}

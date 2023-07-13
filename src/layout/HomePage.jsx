@@ -3,6 +3,7 @@ import React from 'react'
 import { ImHome } from "react-icons/im";
 import { BsFillClipboardDataFill } from "react-icons/bs";
 import { FaChartSimple } from "react-icons/fa6";
+import { Inventory } from './Inventory';
 
 export const HomePage = () => {
     return (
@@ -57,9 +58,13 @@ export const HomePage = () => {
                 <div
                     className='content'
                     style={{
-                        backgroundColor: '#f0ead2'
+                        backgroundColor: '#f0ead2',
+                        display:'flex', alignItems:'center', justifyContent:'flex-start',
+                        flexDirection:'column', 
                     }}
-                />
+                >
+                    <Inventory />
+                </div>
 
             </Row>
 

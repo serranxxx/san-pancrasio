@@ -7,6 +7,7 @@ export const AppRouter = () => {
   return (
     <Routes>
        <Route path="/san-pancrasio" element={ <HomePage />} />
+       <Route path="/*" element={ <HomePage />} />
     </Routes>
   )
 }

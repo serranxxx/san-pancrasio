@@ -2,6 +2,7 @@
     .content {
         height: 85vh;
         width: 98vw;
+        padding-top: 15vh;
     }
 
     .sider {
@@ -21,6 +22,7 @@
         transform: translateY(-5px);
         transition: all 0.55s ease-in-out;
     }
+
     .header {
         height: 5vh;
         width: 98vw;
@@ -34,6 +36,7 @@
         margin-left: 7vh;
         margin-right: 7vh;
     }
+
 
 }
 
@@ -41,6 +44,7 @@
     .content {
         height: 85vh;
         width: 98vw;
+        padding-top: 15vh;
     }
 
     .sider {
@@ -75,15 +79,18 @@
         margin-right: 7vh;
     }
 
+
 }
 
 @media screen and (min-height: 701px) and (min-width: 1001px) {
     .content {
         height: 80vh;
         width: 98vw;
+        padding-top: 6vh;
     }
 
     .sider {
+        /* margin-top: 1vh; */
         height: 100vh;
         width: 8vw;
         position: absolute;
@@ -104,6 +111,11 @@
     .middle-icon {
         margin-top: 7vh;
         margin-bottom: 7vh;
+    }
+
+    .inventory {
+        
+        margin-left: 10vw;
     }
 
 }
