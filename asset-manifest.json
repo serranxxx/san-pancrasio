@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/san-pancrasio/static/css/main.e364118f.css",
+    "main.js": "/san-pancrasio/static/js/main.ac1fb9d5.js",
+    "static/media/header-8.png": "/san-pancrasio/static/media/header-8.866ba4e19dc3841d495f.png",
+    "index.html": "/san-pancrasio/index.html",
+    "main.e364118f.css.map": "/san-pancrasio/static/css/main.e364118f.css.map",
+    "main.ac1fb9d5.js.map": "/san-pancrasio/static/js/main.ac1fb9d5.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e364118f.css",
+    "static/js/main.ac1fb9d5.js"
+  ]
+}
