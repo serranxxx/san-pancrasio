@@ -1,13 +1,18 @@
 import { Button, Col, Form, Input, InputNumber, Modal, Row, Select, Table, Tag } from 'antd';
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { SearchOutlined } from '@ant-design/icons';
 import { CurrentItem } from './CurrentItem';
+import useAxios from '../hooks/UseAxios';
+import { appContext } from '../context/appContext';
 const { Option } = Select
 
 export const Inventory = () => {
 
 
-    const [data, setData] = useState([])
+    const { response, loading, error, operation } = useAxios()
+    const { items, setItems} = useContext(appContext)
+    const [data, setData] = useState(items)
+    // const [items, setItems] = useState([])
     const [addItem, setAddItem] = useState(false)
     const [currentItem, setCurrentItem] = useState(false)
     const [edit, setEdit] = useState(false)
@@ -289,18 +294,10 @@ export const Inventory = () => {
         },
     ];
 
-    function generateRandomId() {
-        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        const randomLetters = letters[Math.floor(Math.random() * letters.length)] + letters[Math.floor(Math.random() * letters.length)];
-        const randomNumbers = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-        return randomLetters + randomNumbers;
-    }
-
-    const createNewItem = (values) => {
-        console.log(values)
+    const createNewItem = async (values) => {
 
         const newItem = {
-            id: generateRandomId(),
+            id: values.id,
             name: values.name,
             productPrice: values.productPrice,
             porcentage: values.porcentage,
@@ -313,9 +310,11 @@ export const Inventory = () => {
             state: values.amount >= values.minAmount ? true : false
 
         }
-
         setData([...data, newItem])
+        // postItem(values.id, values.name, values.productPrice, values.porcentage, values.unity, values.minAmount, values.amount)
+        // console.log('product price 1: ', values.productPrice)
         setAddItem(false)
+
     }
 
     const handleOk = () => {
@@ -352,14 +351,14 @@ export const Inventory = () => {
                 Item.profit = Item.productPrice * (Item.porcentage / 100)
                 Item.customerPrice = Item.productPrice + Item.profit
                 Item.purchaseCosto = Item.productPrice * (Item.minAmount - Item.amount)
-                if (Item.purchaseCosto <= 0 ) Item.purchaseCosto = 0
+                if (Item.purchaseCosto <= 0) Item.purchaseCosto = 0
 
                 setCurrentProductPrice(Item.productPrice)
-                
+
                 setCurrentProfit(Item.profit)
                 setCurrentCostumerPrice(Item.customerPrice)
                 setCurrentPurchaseCost(Item.purchaseCosto)
-                
+
             }
 
             if (values.porcentage) {
@@ -375,11 +374,11 @@ export const Inventory = () => {
             if (values.amount) {
                 Item.amount = values.amount
                 Item.purchaseCosto = Item.productPrice * (Item.minAmount - Item.amount)
-                if (Item.purchaseCosto <= 0 ) Item.purchaseCosto = 0
+                if (Item.purchaseCosto <= 0) Item.purchaseCosto = 0
 
                 setCurrentAmount(Item.amount)
                 setCurrentPurchaseCost(Item.purchaseCosto)
-                
+
             }
 
             if (values.unity) {
@@ -391,8 +390,8 @@ export const Inventory = () => {
 
             if (values.minAmount) {
                 Item.minAmount = values.minAmount
-                Item.purchaseCosto = Item.productPrice * (Item.minAmount - Item.amount).toFixed(2) 
-                if (Item.purchaseCosto <= 0 ) Item.purchaseCosto = 0
+                Item.purchaseCosto = Item.productPrice * (Item.minAmount - Item.amount).toFixed(2)
+                if (Item.purchaseCosto <= 0) Item.purchaseCosto = 0
                 setCurrentMinAmount(Item.minAmount)
                 setCurrentPurchaseCost(Item.purchaseCosto)
             }
@@ -400,13 +399,6 @@ export const Inventory = () => {
             setData([...data])
 
         }
-
-
-
-
-        
-
-
     }
 
     const handleEdit = () => {
@@ -416,6 +408,80 @@ export const Inventory = () => {
         } else setEdit(true)
     }
 
+    useEffect(() => {
+      setItems(data)
+    }, [data])
+    
+
+    // const postItem = async (id, name, productPrice, porcentage, unity, minAmount, amount) => {
+    //     try {
+    //         await operation({
+    //             method: "POST",
+    //             url: "/items/newItem",
+    //             headers: { accept: "*/*" },
+    //             data: {
+    //                 id: id,
+    //                 name: name,
+    //                 productPrice: productPrice,
+    //                 porcentage: porcentage,
+    //                 profit: (productPrice * (porcentage / 100)).toFixed(2),
+    //                 customerPrice: ((productPrice * (porcentage / 100)) + productPrice).toFixed(2),
+    //                 unity: unity,
+    //                 minAmount: minAmount,
+    //                 amount: amount,
+    //                 purchaseCosto: amount >= minAmount ? '0.00' : ((minAmount - amount) * productPrice).toFixed(2),
+    //                 state: amount >= minAmount ? true : false
+    //             },
+    //         })
+
+    //         console.log('product price 2: ', productPrice)
+    //     }
+    //     catch (error) {
+    //         console.error(error)
+    //     }
+
+    // }
+
+    // const getItems = async () => {
+    //     try {
+    //         await operation({
+    //             method: "GET",
+    //             url: "/items/getItems",
+    //         })
+
+    //     } catch (error) {
+    //         console.error(error)
+    //     }
+    // }
+
+    // useEffect(() => {
+    //     setItems([])
+    //     getItems()
+    // }, [])
+
+    // useEffect(() => {
+    //     if (!loading) {
+    //         switch (response.data.msg) {
+    //             case 'Item uploaded':
+    //                 console.log(response)
+    //                 setItems([])
+    //                 getItems()
+
+    //                 break;
+
+    //             case 'Get items':
+    //                 console.log('aaa',response.data.data)
+    //                 const values = response.data.data
+    //                 if (values.length > 0 ){
+    //                     setItems([...items, ...response.data.data])
+    //                 } else setItems([])
+    //                 break;
+
+    //             default:
+    //                 break;
+    //         }
+    //     }
+    // }, [response])
 
 
     return (
@@ -436,19 +502,20 @@ export const Inventory = () => {
                         className='button'
                         onClick={() => setAddItem(true)}
                         style={{
-                            backgroundColor: '#adc178', fontWeight: 500, color: '#f0ead2'
+                            backgroundColor: '#adc178', fontWeight: 500, color: '#f0ead2',
+                            boxShadow: '0px 3px 10px #00000020',
                         }}>
-                        + Agregar nuevo artículo
+                        + Agregar nuevo artículo al inventario
                     </Button>
 
-                    <Button
+                    {/* <Button
                         className='button'
                         style={{
                             marginLeft: '2vh',
                             backgroundColor: '#adc178', fontWeight: 500, color: '#f0ead2'
                         }}>
                         + Agregar inventario
-                    </Button>
+                    </Button> */}
 
                 </Row>
                 <Table
@@ -469,7 +536,7 @@ export const Inventory = () => {
             </div>
 
             <Modal
-                visible={addItem}
+                open={addItem}
                 onOk={handleOk}
                 onCancel={handleOk}
                 className={`add-item`}
@@ -513,6 +580,31 @@ export const Inventory = () => {
                         }}>
                             <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'left', marginTop: '3%', marginBottom: '2%' }}>
                                 <span style={{ fontSize: 13, }}>
+                                    ID</span>
+                            </div>
+                            <Form.Item
+                                name="id"
+                                rules={[
+                                    { required: true, message: `Por favor ingresa un nombre` }
+                                ]}
+                                style={{}}>
+
+                                <Input placeholder="AB-543"
+                                    className='project-inputs'
+                                    style={{
+                                        fontWeight: 500,
+                                        fontWeight: '1em',
+                                    }} />
+
+                            </Form.Item>
+
+                        </div>
+
+                        <div style={{
+                            width: '45%', marginLeft: '5%', marginRight: '5%'
+                        }}>
+                            <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'left', marginTop: '3%', marginBottom: '2%' }}>
+                                <span style={{ fontSize: 13, }}>
                                     Nombre</span>
                             </div>
                             <Form.Item
@@ -534,7 +626,7 @@ export const Inventory = () => {
                         </div>
 
                         <div style={{
-                            width: '45%', marginLeft: '5%', marginRight: '5%'
+                            width: '45%', marginTop: '-3vh'
                         }}>
                             <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'left', marginTop: '3%', marginBottom: '2%' }}>
                                 <span style={{ fontSize: 13, }}>
@@ -563,7 +655,7 @@ export const Inventory = () => {
                         </div>
 
                         <div style={{
-                            width: '45%', marginTop: '-3vh'
+                            width: '45%', marginLeft: '5%', marginRight: '5%', marginTop: '-3vh'
                         }}>
 
                             <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'left', marginTop: '3%', marginBottom: '2%' }}>
@@ -594,7 +686,7 @@ export const Inventory = () => {
                         </div>
 
                         <div style={{
-                            width: '45%', marginLeft: '5%', marginRight: '5%', marginTop: '-3vh'
+                            width: '45%', marginTop: '-3vh'
                         }}>
                             <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'left', marginTop: '3%', marginBottom: '2%' }}>
                                 <span style={{ fontSize: 13, }}>
@@ -625,7 +717,7 @@ export const Inventory = () => {
                         </div>
 
                         <div style={{
-                            width: '45%', marginTop: '-3vh'
+                            width: '45%', marginLeft: '5%', marginRight: '5%', marginTop: '-3vh'
                         }}>
                             <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'left', marginTop: '3%', marginBottom: '2%' }}>
                                 <span style={{ fontSize: 13, }}>
@@ -656,7 +748,7 @@ export const Inventory = () => {
                         </div>
 
                         <div style={{
-                            width: '45%', marginLeft: '5%', marginRight: '5%', marginTop: '-3vh'
+                            width: '45%', marginTop: '-3vh'
                         }}>
 
                             <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'left', marginTop: '3%', marginBottom: '2%' }}>
@@ -673,9 +765,9 @@ export const Inventory = () => {
 
 
                                 <Select placeholder='Kg' style={{ width: '100%' }}>
-                                    <Option value="kg">Kilogramos</Option>
-                                    <Option value="gr">Gramos</Option>
-                                    <Option value="lb">Libras</Option>
+                                    <Option value="kg" key={'kg'}>Kilogramos</Option>
+                                    <Option value="gr" key={'gr'}>Gramos</Option>
+                                    <Option value="lb" key={'lb'}>Libras</Option>
                                 </Select>
 
                             </Form.Item>
@@ -686,8 +778,7 @@ export const Inventory = () => {
                         <Form.Item
 
                             style={{
-                                marginBottom: '1vh', width: '90%', display: 'flex', marginTop: '2vh',
-                                alignItems: 'center', justifyContent: 'center'
+                                width: '45%', marginLeft: '2%', marginTop: '1.5vh'
                             }}>
 
                             <Button
@@ -711,7 +802,7 @@ export const Inventory = () => {
             </Modal >
 
             <Modal
-                visible={currentItem}
+                open={currentItem}
                 onOk={handleOk}
                 onCancel={handleOk}
                 className={`add-item`}

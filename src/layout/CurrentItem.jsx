@@ -16,12 +16,14 @@ export const CurrentItem = (props) => {
                 props.edit
                     ?
                     <Form.Item
+                        key={props.title}
                         name={props.item}
-                        style={{width:'30%', marginTop:'0vh', marginLeft:'-3vh', marginRight:'0vh', marginBottom:'0vh'}}
+                        style={{ width: '30%', marginTop: '0vh', marginLeft: '-3vh', marginRight: '0vh', marginBottom: '0vh' }}
                     >
                         {
                             props.type === 'number'
                                 ? <InputNumber
+                                    key={props.title}
                                     placeholder={`${props.name}`}
                                     className='project-inputs'
                                     min={0}
@@ -30,9 +32,9 @@ export const CurrentItem = (props) => {
                                     }} />
 
                                 : <Select placeholder='Kg' style={{ width: '100%' }}>
-                                    <Option value="kg">Kilogramos</Option>
-                                    <Option value="gr">Gramos</Option>
-                                    <Option value="lb">Libras</Option>
+                                    <Option value="kg" key={'kg'}>Kilogramos</Option>
+                                    <Option value="gr" key={'gr'}>Gramos</Option>
+                                    <Option value="lb" key={'lb'}>Libras</Option>
                                 </Select>
                         }
 
