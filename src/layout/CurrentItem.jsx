@@ -34,7 +34,7 @@ export const CurrentItem = (props) => {
                                 : <Select placeholder='Kg' style={{ width: '100%' }}>
                                     <Option value="kg" key={'kg'}>Kilogramos</Option>
                                     <Option value="gr" key={'gr'}>Gramos</Option>
-                                    <Option value="lb" key={'lb'}>Libras</Option>
+                                    {/* <Option value="lb" key={'lb'}>Libras</Option> */}
                                 </Select>
                         }
 

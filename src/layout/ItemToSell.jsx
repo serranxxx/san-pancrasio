@@ -7,12 +7,20 @@ const { Option } = Select
 export const ItemToSell = (props) => {
 
     const [form] = Form.useForm();
+    const [ids, setIds] = useState(false)
 
     const onFinish = (values) => {
-        props.handleValues(values. id, values.q, values.u)
+        props.handleValues(values.id, values.q, values.u)
         form.resetFields();
     }
-    
+
+    useEffect(() => {
+        const ids = JSON.parse(localStorage.getItem('itemIds'))
+        if (ids) setIds(true)
+        else setIds(false)
+    }, [])
+
+
 
     return (
         <>
@@ -37,12 +45,13 @@ export const ItemToSell = (props) => {
                         placeholder='AB-123'
                         style={{ width: '100%', }}>
                         {
-
-                            JSON.parse(localStorage.getItem('itemIds')).map((ids) => (
+                            ids ? JSON.parse(localStorage.getItem('itemIds')).map((ids) => (
                                 <Option key={ids} value={ids}>
                                     {ids}
                                 </Option>
                             ))
+
+                                : <></>
                         }
                     </Select>
                 </Form.Item>
@@ -56,6 +65,7 @@ export const ItemToSell = (props) => {
                         width: '15vh', margin: '0vh 0vh 0vh 1vh'
                     }}>
                     <InputNumber
+                        min={0}
                         placeholder='10'
                         style={{ width: '100%', }} />
                 </Form.Item>
@@ -71,7 +81,7 @@ export const ItemToSell = (props) => {
                         style={{ width: '100%', }}>
                         <Option value="kg" key={'kg'}>Kg</Option>
                         <Option value="gr" key={'gr'}>gr</Option>
-                        <Option value="lb" key={'lb'}>lb</Option>
+                        {/* <Option value="lb" key={'lb'}>lb</Option> */}
                     </Select>
                 </Form.Item>
 
