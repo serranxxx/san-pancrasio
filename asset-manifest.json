@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/san-pancrasio/static/css/main.e97f963c.css",
-    "main.js": "/san-pancrasio/static/js/main.1ee0af6f.js",
+    "main.js": "/san-pancrasio/static/js/main.b004a7c3.js",
     "static/media/header-8.png": "/san-pancrasio/static/media/header-8.866ba4e19dc3841d495f.png",
     "index.html": "/san-pancrasio/index.html",
     "main.e97f963c.css.map": "/san-pancrasio/static/css/main.e97f963c.css.map",
-    "main.1ee0af6f.js.map": "/san-pancrasio/static/js/main.1ee0af6f.js.map"
+    "main.b004a7c3.js.map": "/san-pancrasio/static/js/main.b004a7c3.js.map"
   },
   "entrypoints": [
     "static/css/main.e97f963c.css",
-    "static/js/main.1ee0af6f.js"
+    "static/js/main.b004a7c3.js"
   ]
 }
