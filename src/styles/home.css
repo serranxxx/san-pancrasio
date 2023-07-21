@@ -1,8 +1,8 @@
 .scrollable-div {
-    max-height: 22vh;
+    max-height: 30vh;
     overflow: auto;
     overflow-y: auto;
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
   }
   
   .scrollable-div::-webkit-scrollbar {

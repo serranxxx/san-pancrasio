@@ -15,8 +15,8 @@ const init = () => {
             name: 'Producto de ejemplo',
             productPrice: 100,
             porcentage: 15,
-            profit: (100* (15 / 100)).toFixed(2),
-            customerPrice: ((100 * (15/ 100)) + 100).toFixed(2),
+            profit: (100 * (15 / 100)).toFixed(2),
+            customerPrice: ((100 * (15 / 100)) + 100).toFixed(2),
             unity: 'Kg',
             minAmount: 15,
             amount: 14,
@@ -25,9 +25,26 @@ const init = () => {
 
         }]
     }
+
+    let sales = JSON.parse(localStorage.getItem('sales'))
+    if (!sales) {
+        sales = [{
+            date: '2023-05-05',
+            saleId: '1234',
+            id: 'AB-123',
+            quantity: 1,
+            unity: 'kg',
+            name: 'Producto de ejemplo',
+            profit: 10,
+            customerPrice: 110,
+            stateOfsale: true,
+            simpleCustomerPrice: 100
+
+        }]
+    }
     return {
         items: items,
-        
+        totalSales: sales,
     }
 }
 
@@ -47,12 +64,34 @@ export const AppProvider = ({ children }) => {
         dispatch(action)
     }
 
+    const setIds = (ids = []) => {
+        const itemIds = ids
+        const action = {
+            type: types.itemIds,
+            payload: itemIds
+        }
+        localStorage.setItem('itemIds', JSON.stringify(itemIds))
+        dispatch(action)
+    }
+
+    const setTotalsales = (sales = []) => {
+        const Sales = sales
+        const action = {
+            type: types.setSales,
+            payload: Sales
+        }
+        localStorage.setItem('sales', JSON.stringify(Sales))
+        dispatch(action)
+    }
+
 
 
     return (
-        <appContext.Provider  value={{
+        <appContext.Provider value={{
             ...state,
             setItems,
+            setIds,
+            setTotalsales,
         }}>
             {children}
         </appContext.Provider >

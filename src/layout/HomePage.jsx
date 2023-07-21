@@ -3,13 +3,23 @@ import React, { useState } from 'react'
 import { ImHome } from "react-icons/im";
 import { BsFillClipboardDataFill } from "react-icons/bs";
 import { FaChartSimple } from "react-icons/fa6";
+import { IoLogOut } from "react-icons/io5";
 import { Inventory } from './Inventory';
 import { Home } from './Home';
 import { Sales } from './Sales';
+import { useNavigate } from 'react-router-dom';
 
 export const HomePage = () => {
 
     const [position, setPosition] = useState(0)
+
+    const navigate = useNavigate()
+    const handleLogout = () => {
+
+        navigate('/san-pancrasio/login', {
+            replace: true
+        })
+    }
 
 
     return (
@@ -50,20 +60,31 @@ export const HomePage = () => {
                         onClick={() => setPosition(0)}
                         className='icon'
                         style={{
-                            color: `${position === 0?'#adc178': '#f0ead2'}`, cursor: 'pointer'
+                            color: `${position === 0 ? '#adc178' : '#f0ead2'}`, cursor: 'pointer'
+                        }} />
+
+                    <BsFillClipboardDataFill size={'5vh'}
+                        onClick={() => setPosition(2)}
+                        className='middle-icon icon'
+                        style={{
+                            color: `${position === 2 ? '#adc178' : '#f0ead2'}`, cursor: 'pointer'
                         }} />
                     <FaChartSimple size={'5vh'}
                         onClick={() => setPosition(1)}
-                        className='middle-icon icon'
+                        className='stats-icon icon'
                         style={{
-                            color: `${position === 1?'#adc178': '#f0ead2'}`, cursor: 'pointer'
+                            color: `${position === 1 ? '#adc178' : '#f0ead2'}`, cursor: 'pointer'
                         }} />
-                    <BsFillClipboardDataFill size={'5vh'}
-                        onClick={() => setPosition(2)}
-                        className='icon'
-                        style={{
-                            color: `${position === 2?'#adc178': '#f0ead2'}`, cursor: 'pointer'
-                        }} />
+
+                    <IoLogOut size={'7vh'}
+                        onClick={handleLogout}
+                    className='logout-icon icon'
+                    style={{
+                        color: `${position === 3 ? '#adc178' : '#f0ead2'}`, cursor: 'pointer',
+
+                    }} />
+
+
 
                 </div>
 
@@ -77,10 +98,10 @@ export const HomePage = () => {
                 >
                     {
                         position === 0
-                        ? <Home /> : position === 1
-                            ? <Sales /> : <Inventory />
+                            ? <Home /> : position === 1
+                                ? <Sales /> : <Inventory />
                     }
-                    
+
                 </div>
 
             </Row>

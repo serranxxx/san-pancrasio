@@ -1,6 +1,7 @@
 import { Button, Col, Form, Input, InputNumber, Modal, Row, Select, Table, Tag } from 'antd';
 import React, { useContext, useEffect, useState } from 'react'
 import { SearchOutlined } from '@ant-design/icons';
+import { MdAddToPhotos, MdDeleteForever } from "react-icons/md";
 import { CurrentItem } from './CurrentItem';
 import useAxios from '../hooks/UseAxios';
 import { appContext } from '../context/appContext';
@@ -10,7 +11,7 @@ export const Inventory = () => {
 
 
     const { response, loading, error, operation } = useAxios()
-    const { items, setItems} = useContext(appContext)
+    const { items, setItems, setIds } = useContext(appContext)
     const [data, setData] = useState(items)
     // const [items, setItems] = useState([])
     const [addItem, setAddItem] = useState(false)
@@ -134,14 +135,6 @@ export const Inventory = () => {
             key: 'productPrice',
             render: (value) =>
                 <p style={{ fontWeight: 400, }}>{`$${value}`}</p>
-            // filters: filterDocuments,
-            // filterSearch: true,
-            // onFilter: (value, record) => record.document.includes(value),
-            // onFilter: (text, record) => record.document === text,
-            // sorter: (a, b) => a.document.localeCompare(b.document),
-            // sortDirections: ['ascend']
-            // render: (value) =>
-            //     <p style={{ fontWeight: 500, lineHeight: '0.9em'}}>{value}</p>
 
         },
         {
@@ -151,12 +144,7 @@ export const Inventory = () => {
             key: 'porcentage',
             render: (value) =>
                 <p style={{ fontWeight: 400, }}>{`${value}%`}</p>
-            // filters: filterDifficulties,
-            // filterSearch: true,
-            // onFilter: (value, record) => record.difficulty.includes(value),
-            // onFilter: (text, record) => record.difficulty === text,
-            // sorter: (a, b) => a.difficulty.localeCompare(b.difficulty),
-            // sortDirections: ['ascend']
+
 
         },
         {
@@ -184,15 +172,6 @@ export const Inventory = () => {
             width: '13vh',
             dataIndex: 'unity',
             key: 'unity',
-            // filters: filterCountry,
-            // filterSearch: true,
-            // onFilter: (value, record) => record.country.includes(value),
-            // onFilter: (text, record) => record.country === text,
-            // sorter: (a, b) => a.country.localeCompare(b.country),
-            // sortDirections: ['ascend']
-
-
-
 
         },
         {
@@ -274,6 +253,28 @@ export const Inventory = () => {
             )
         },
         {
+            title: `Eliminar`,
+            key: 'operation',
+            // fixed: 'right',
+            width: '12vh',
+            render: (text, render) =>
+                <div style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center'
+                }}>
+                    <Button
+                        // key={items}
+                        onClick={() => deleteItem(render.id)}
+                        htmlType='submit'
+                        icon={<MdDeleteForever size={'3vh'} style={{ color: '#c3c3c3' }} />
+                        }
+                        style={{
+                            aspectRatio: '1/1',
+                            backgroundColor: '#f3f3f3', marginLeft: '1vh',
+                            fontWeight: 500, color: '#6c584c', border: '1.5px solid #e3e3e3',
+                        }} />
+                </div>,
+        },
+        {
             title: `Detalles`,
             key: 'operation',
             fixed: 'right',
@@ -311,6 +312,7 @@ export const Inventory = () => {
 
         }
         setData([...data, newItem])
+
         // postItem(values.id, values.name, values.productPrice, values.porcentage, values.unity, values.minAmount, values.amount)
         // console.log('product price 1: ', values.productPrice)
         setAddItem(false)
@@ -375,6 +377,7 @@ export const Inventory = () => {
                 Item.amount = values.amount
                 Item.purchaseCosto = Item.productPrice * (Item.minAmount - Item.amount)
                 if (Item.purchaseCosto <= 0) Item.purchaseCosto = 0
+                if (Item.amount > Item.minAmount) Item.state = false
 
                 setCurrentAmount(Item.amount)
                 setCurrentPurchaseCost(Item.purchaseCosto)
@@ -392,6 +395,7 @@ export const Inventory = () => {
                 Item.minAmount = values.minAmount
                 Item.purchaseCosto = Item.productPrice * (Item.minAmount - Item.amount).toFixed(2)
                 if (Item.purchaseCosto <= 0) Item.purchaseCosto = 0
+                if (Item.amount > Item.minAmount) Item.state = false
                 setCurrentMinAmount(Item.minAmount)
                 setCurrentPurchaseCost(Item.purchaseCosto)
             }
@@ -408,80 +412,21 @@ export const Inventory = () => {
         } else setEdit(true)
     }
 
+    const deleteItem = (item_id) => {
+        // const itemToDelete = sales.find(item => item.saleId === item_id);
+        const updatedItems = data.filter(item => item.id !== item_id);
+        setData([...updatedItems])
+    }
+
     useEffect(() => {
-      setItems(data)
+
+        function extractIds(data) {
+            return data.map(obj => obj.id);
+        }
+        setItems(data)
+        setIds(extractIds(data))
     }, [data])
-    
 
-    // const postItem = async (id, name, productPrice, porcentage, unity, minAmount, amount) => {
-    //     try {
-    //         await operation({
-    //             method: "POST",
-    //             url: "/items/newItem",
-    //             headers: { accept: "*/*" },
-    //             data: {
-    //                 id: id,
-    //                 name: name,
-    //                 productPrice: productPrice,
-    //                 porcentage: porcentage,
-    //                 profit: (productPrice * (porcentage / 100)).toFixed(2),
-    //                 customerPrice: ((productPrice * (porcentage / 100)) + productPrice).toFixed(2),
-    //                 unity: unity,
-    //                 minAmount: minAmount,
-    //                 amount: amount,
-    //                 purchaseCosto: amount >= minAmount ? '0.00' : ((minAmount - amount) * productPrice).toFixed(2),
-    //                 state: amount >= minAmount ? true : false
-    //             },
-    //         })
-
-    //         console.log('product price 2: ', productPrice)
-    //     }
-    //     catch (error) {
-    //         console.error(error)
-    //     }
-
-    // }
-
-    // const getItems = async () => {
-    //     try {
-    //         await operation({
-    //             method: "GET",
-    //             url: "/items/getItems",
-    //         })
-
-    //     } catch (error) {
-    //         console.error(error)
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     setItems([])
-    //     getItems()
-    // }, [])
-
-    // useEffect(() => {
-    //     if (!loading) {
-    //         switch (response.data.msg) {
-    //             case 'Item uploaded':
-    //                 console.log(response)
-    //                 setItems([])
-    //                 getItems()
-
-    //                 break;
-
-    //             case 'Get items':
-    //                 console.log('aaa',response.data.data)
-    //                 const values = response.data.data
-    //                 if (values.length > 0 ){
-    //                     setItems([...items, ...response.data.data])
-    //                 } else setItems([])
-    //                 break;
-
-    //             default:
-    //                 break;
-    //         }
-    //     }
-    // }, [response])
 
 
     return (
@@ -503,7 +448,8 @@ export const Inventory = () => {
                         onClick={() => setAddItem(true)}
                         style={{
                             backgroundColor: '#adc178', fontWeight: 500, color: '#f0ead2',
-                            boxShadow: '0px 3px 10px #00000020',
+                            border:'1px solid #adc178'
+                            // boxShadow: '0px 3px 10px #00000020',
                         }}>
                         + Agregar nuevo artículo al inventario
                     </Button>
@@ -530,7 +476,7 @@ export const Inventory = () => {
                     dataSource={data}
                     scroll={{
                         y: '50vh',
-                        x: '165vh',
+                        x: '175vh',
                     }}
                     pagination={false} />
             </div>

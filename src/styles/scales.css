@@ -35,6 +35,11 @@
     .middle-icon {
         margin-left: 7vh;
         margin-right: 7vh;
+        
+    }
+
+    .stats-icon {
+        display: none;
     }
 
 
@@ -111,6 +116,11 @@
     .middle-icon {
         margin-top: 7vh;
         margin-bottom: 7vh;
+    }
+
+    .logout-icon {
+        margin-top: 7vh;
+        margin-left: 1vh;
     }
 
     .inventory {

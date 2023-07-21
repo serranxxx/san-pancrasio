@@ -10,6 +10,18 @@ export const AppReducer = (state = {}, action) => {
                 items: action.payload
             }
 
+        case types.itemIds:
+            return {
+                ...state,
+                itemIds: action.payload
+            }
+
+        case types.setSales:
+            return {
+                ...state,
+                totalSales: action.payload
+            }
+
         default:
             break;
     }

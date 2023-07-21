@@ -1,11 +1,24 @@
 import { Button, Col, Form, Input, InputNumber, Row, Select } from 'antd'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { ItemToSell } from './ItemToSell';
+import { appContext } from '../context/appContext';
+import { Resumen } from './Resumen';
+import { Reports } from './Reports';
 
 export const Home = () => {
 
+
+
+
+    const [form] = Form.useForm();
+    const { items, itemIds, setTotalsales, totalSales } = useContext(appContext)
+    const [counter_, setCounter_] = useState(1)
     const [currentDate, setCurrentDate] = useState('');
-    const [newItem, setNewItem] = useState([])
+    const [simpleDate, setSimpleDate] = useState('')
+    const [sales, setSales] = useState([])
+    const [handleSales, setHandleSales] = useState(totalSales)
+    
+    // const [Reports, setReports] = useState([])
 
     // useEffect(() => {
     //     const fetchCurrentDate = () => {
@@ -17,6 +30,44 @@ export const Home = () => {
     //     fetchCurrentDate();
     //   }, []);
 
+    function generateUniqueId() {
+        const chars = '0123456789';
+        let id = '';
+
+        for (let i = 0; i < 4; i++) {
+            const randomIndex = Math.floor(Math.random() * chars.length);
+            id += chars[randomIndex];
+        }
+
+        return id;
+    }
+
+
+    const handleValues = (id, q, u) => {
+
+        const Item = items.find(item => item.id === id)
+        if (Item) {
+
+            const newSale = {
+                date: simpleDate,
+                saleId: generateUniqueId(),
+                id: id,
+                quantity: u === 'kg' ? q : q / 1000,
+                unity: 'kg',
+                name: Item.name,
+                profit: u === 'kg' ? (parseFloat(Item.profit) * q).toFixed(2) : (parseFloat(Item.profit) * q / 1000).toFixed(2),
+                customerPrice: u === 'kg' ? ((parseFloat(Item.productPrice) + parseFloat(Item.profit)) * q).toFixed(2) : ((parseFloat(Item.productPrice) + parseFloat(Item.profit)) * q / 1000).toFixed(2),
+                stateOfsale: false,
+                simpleCustomerPrice: Item.customerPrice
+            }
+
+            setSales([...sales, newSale])
+            setCounter_(counter_ + 1)
+            console.log(newSale)
+        }
+    }
+
+
     useEffect(() => {
         const fetchCurrentDate = () => {
             const today = new Date();
@@ -25,9 +76,71 @@ export const Home = () => {
             setCurrentDate(formattedDate);
         };
 
+        const fetchSimpleDate = () => {
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            setSimpleDate(formattedDate);
+
+        };
+
         fetchCurrentDate();
+        fetchSimpleDate()
+
+        const sales = JSON.parse(localStorage.getItem('sales'))
+        if (sales) {
+            setHandleSales(sales)
+        } else setHandleSales([])
+
+        // console.log(handleSales)
     }, []);
 
+    function sumCustomerPrices(data) {
+        const total = data.reduce((accumulator, obj) => {
+            const customerPrice = parseFloat(obj.customerPrice);
+            return accumulator + customerPrice;
+        }, 0);
+
+        return total;
+    }
+
+    const deleteItem = (item_id) => {
+        // const itemToDelete = sales.find(item => item.saleId === item_id);
+        const updatedItems = sales.filter(item => item.saleId !== item_id);
+
+        setSales([...updatedItems])
+    }
+
+
+    const onFinish = () => {
+
+        setHandleSales([...handleSales, ...sales])
+        sales.map((sale) => {
+            console.log('id', sale.id)
+            items.map((item) => {
+                if (sale.id === item.id) {
+                    console.log('match: ', item.name)
+                    item.amount = item.amount - sale.quantity
+                    item.purchaseCosto = ((item.minAmount - item.amount) * item.productPrice).toFixed(2)
+                    if (item.purchaseCosto < 0) item.purchaseCosto = 0
+                    if (item.amount < item.minAmount) {
+                        item.state = false
+                    }
+                }
+            })
+        })
+
+
+        setSales([])
+    }
+
+    
+
+    useEffect(() => {
+        // setReports_()
+        setTotalsales(handleSales)
+    }, [sales])
+
+    
 
 
     return (
@@ -39,9 +152,9 @@ export const Home = () => {
             }}>
 
             <div style={{
-                width: '70%', height: 'auto',
-                display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-start',
-                flexDirection: 'column', borderRadius: '3vh',
+                width: '80vh', height: 'auto',
+                display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
+                flexDirection: 'column', borderRadius: '3vh', marginBottom: '0vh',
                 backgroundColor: '#dde5b6', boxShadow: '0px 5px 10px #00000040'
             }}>
                 <p style={{
@@ -56,100 +169,89 @@ export const Home = () => {
                     marginBottom: '2vh'
                 }} />
 
-                <Row style={{ width: '100%' }}>
+                <Row style={{
+                    width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                }}>
                     <Col style={{
-                        width: '48%', height: 'auto'
+                        width: '90%', height: 'auto',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        flexDirection: 'column'
                     }}>
-                        <Button
-                            onClick={() => setNewItem([...newItem, 1])}
-                            style={{
-                                backgroundColor: '#adc178', fontWeight: 500, color: '#f0ead2',
-                                boxShadow: '0px 3px 10px #00000020', marginBottom: '1vh',
-                                marginLeft: '3vh', width: '88%', border:'1.5px solid #adc178'
+                        <div style={{
+                            width: '95%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            flexDirection: 'row'
+                        }}>
+                            <ItemToSell handleValues={handleValues} />
+
+                            <div style={{
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                width: '18%', borderRadius: '2vh', height: '5vh', backgroundColor: '#adc178'
                             }}>
-                            + Agregar artícutlo
-                        </Button>
-
-                        <Form
-                            className='scrollable-div'
-                            style={{
-                                width: '88%',
-                                display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-start',
-                                flexDirection: 'column', marginLeft: '4vh', marginTop: '1vh'
-                            }}>
-                            {
-                                ItemToSell ? <ItemToSell sales={newItem} />
-                                    : <></>
-                            }
-
-                        </Form>
-
-                    </Col>
-
-                    <Col style={{
-                        marginLeft: '4vh',
-                        width: '45%', height: 'auto',
-                    }}>
-                        <p style={{
-
-                            fontWeight: 700, color: '#6c584c',
-                            fontSize: '1.5em', fontStyle: 'italic',
-                            marginTop: '-1vh'
-                        }}>Resumen</p>
-
-                        <div
-                            className='scrollable-div'
-                            style={{
-                                height: 'auto',
-                                width: '99%',
-                                backgroundColor: '#f0ead2', borderRadius: '1.5vh'
-                            }}>
-                            <div style={{ height: `${(newItem.length * 12)}vh` }} />
+                                <p style={{
+                                    fontWeight: 500, color: '#f3f3f3'
+                                }}>{`$${sumCustomerPrices(sales).toFixed(2)}`}</p>
+                            </div>
 
                         </div>
 
+                        <div
+
+                            style={{
+                                height: 'auto',
+                                width: '95%',
+                                display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
+                                flexDirection: 'column', padding: '2% 0% 2% 0%',
+                            }}>
+
+
+                            {
+                                sales ? <Resumen sales={sales} counter={counter_} deleteItem={deleteItem} />
+                                    : <></>
+                            }
+
+                        </div>
+
+
                         <Row style={{
+
                             display: 'flex',
-                            // alignItems:'flex-end',
                             justifyContent: 'center',
                             flexDirection: 'row', width: '98%',
-                            marginBottom: '2vh', marginTop: '2vh'
+                            marginBottom: '2vh', marginTop: '1vh'
                         }}>
                             <Button
+                                onClick={() => setSales([])}
+                                className='button'
                                 style={{
                                     width: '30%',
                                     backgroundColor: '#dde5b6',
-                                    color: '#6c584c', border: '1.5px solid #6c584c',
+                                    color: '#adc178', border: '2px solid #adc178',
                                     fontWeight: 500
                                 }}
                             >Cancelar</Button>
                             <Button
+                                onClick={onFinish}
+                                className='button'
                                 style={{
                                     marginLeft: '2%', width: '30%',
-                                    backgroundColor: '#6c584c',
-                                    border: '1.5px solid #6c584c',
-                                    color: '#dde5b6', fontWeight: 500
-                                }}>Comprar</Button>
+                                    backgroundColor: '#adc178',
+                                    border: '1.5px solid #adc178',
+                                    color: '#f3f3f3', fontWeight: 500
+                                }}>Finalizar</Button>
                         </Row>
+
+
                     </Col>
+
 
 
 
                 </Row>
 
-
-
-
-
-
             </div>
 
-            {/* <div style={{
-                width: '35%', height: '50vh', border: '1px solid red',
-                marginLeft: '5vh'
-            }}>
 
-            </div> */}
+            
 
         </div>
     )
