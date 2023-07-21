@@ -12,3 +12,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.login-button {
+  background-image: url('../assets/SVG/logo.svg');
+  background-size: 30vh;
+  background-position: -2vh -1vh;
+  background-repeat: no-repeat;
+  
+}
+
+.bigger {
+  
+  transform: scale(5.1) !important;
+  /* display: none; */
+}
