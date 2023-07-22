@@ -9,7 +9,7 @@ export const Reports = (props) => {
     
     const getAmount = (id_) => {
         const Item = items.find(item => item.id === id_)
-        const amount = Item.minAmount - Item.amount
+        const amount = (Item.minAmount - Item.amount).toFixed(2)
 
         return amount
     }
@@ -63,20 +63,17 @@ export const Reports = (props) => {
         <>
 
 
-            <div style={{
-                width: '99%', display: 'flex',
-                alignItems: 'center', justifyContent: 'center',
-                flexDirection: 'column', marginBottom: '0vh'
-            }}>
+            
 
                 <Table
 
                     style={{
-                        width: '90%',
+                        width: '25%',
                         height: 'auto',
+                        marginLeft:'3vh'
                     }}
                     // className={}
-                    className={`my-table-2-`}
+                    className={`inventory-table`}
                     columns={columns}
                     dataSource={props.reports}
                     scroll={{
@@ -85,7 +82,7 @@ export const Reports = (props) => {
                     }}
                     pagination={false} />
 
-            </div >
+            
         </>
     )
 }

@@ -50,7 +50,7 @@ export const HomePage = () => {
                 <div
                     className='sider'
                     style={{
-                        backgroundColor: '#6c584c',
+                        backgroundColor: '#6c584c', 
 
                         display: 'flex', alignItems: 'center', justifyContent: 'center'
 
@@ -91,9 +91,9 @@ export const HomePage = () => {
                 <div
                     className='content'
                     style={{
-                        backgroundColor: '#f0ead2',
+                        backgroundColor: '#f0ead2', height:'auto',
                         display: 'flex', alignItems: 'center', justifyContent: 'flex-start',
-                        flexDirection: 'column',
+                        flexDirection: 'column', 
                     }}
                 >
                     {

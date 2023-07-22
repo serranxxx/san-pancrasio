@@ -5,6 +5,10 @@ import { MdAddToPhotos, MdDeleteForever } from "react-icons/md";
 import { CurrentItem } from './CurrentItem';
 import useAxios from '../hooks/UseAxios';
 import { appContext } from '../context/appContext';
+
+import { FaFileDownload } from "react-icons/fa";
+import * as XLSX from 'xlsx'
+import { saveAs } from "file-saver";
 const { Option } = Select
 
 export const Inventory = () => {
@@ -427,6 +431,33 @@ export const Inventory = () => {
         setIds(extractIds(data))
     }, [data])
 
+    const handleDownload = () => {
+        const fileType =
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+        const fileExtension = '.xlsx';
+        const today = new Date();
+        const formattedDate = today.toISOString().split('T')[0];
+        const formattedData = data.map((item) => {
+            // Assuming you have columns 'name', 'age', 'email' in your data objects
+            return {
+                ID: item.id,
+                Nombre: item.name,
+                Precio: item.productPrice,
+                Porcentaje: item.porcentage,
+                Ganancia: item.profit,
+                PrecioFinal: item.customerPrice,
+                Minimo: item.minAmount,
+                Existente: item.amount
+            };
+        });
+
+        const ws = XLSX.utils.json_to_sheet(formattedData);
+        const wb = { Sheets: { data: ws }, SheetNames: ['data'] };
+        const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+        const dataBlob = new Blob([excelBuffer], { type: fileType });
+        saveAs(dataBlob, `Inventario-${formattedDate}${fileExtension}`);
+    };
+
 
 
     return (
@@ -448,11 +479,19 @@ export const Inventory = () => {
                         onClick={() => setAddItem(true)}
                         style={{
                             backgroundColor: '#adc178', fontWeight: 500, color: '#f0ead2',
-                            border:'1px solid #adc178'
+                            border: '1px solid #adc178'
                             // boxShadow: '0px 3px 10px #00000020',
                         }}>
                         + Agregar nuevo artículo al inventario
                     </Button>
+
+                    <Button
+                        icon={<FaFileDownload size={20} style={{ color: '#adc178' }} />}
+                        onClick={handleDownload}
+                        style={{
+                            aspectRatio: '1/1',
+                            marginLeft: '1vh'
+                        }} />
 
                     {/* <Button
                         className='button'

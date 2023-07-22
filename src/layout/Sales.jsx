@@ -2,10 +2,11 @@ import { Button, Input, Row, Table, Tag, DatePicker, Statistic, Col } from 'antd
 import { SearchOutlined } from '@ant-design/icons';
 import React, { useContext, useEffect, useState } from 'react'
 import { appContext } from '../context/appContext';
-import { saveAs } from 'file-saver';
-import XLSX from 'xlsx';
+import { FaFileDownload } from "react-icons/fa";
 import { MdAddToPhotos, MdDeleteForever } from "react-icons/md";
 import { Reports } from './Reports';
+import * as XLSX from 'xlsx'
+import { saveAs } from "file-saver";
 
 export const Sales = () => {
 
@@ -82,34 +83,37 @@ export const Sales = () => {
     return total;
   }
 
+  const handleDownload = () => {
+    const fileType =
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    const fileExtension = '.xlsx';
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0];
+    const formattedData = filteredData.map((item) => {
+      // Assuming you have columns 'name', 'age', 'email' in your data objects
+      return {
+        Fecha: item.date,
+        Id: item.id,
+        Nombre: item.name,
+        Cantidad: item.quantity,
+        Unidad: item.unity,
+        Ingreso: item.customerPrice,
+        Ganancia: item.profit
+      };
+    });
 
-  // const downloadSales = () => {
-  //   const fileType =
-  //     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-  //   const fileExtension = '.xlsx';
+    const ws = XLSX.utils.json_to_sheet(formattedData);
+    const wb = { Sheets: { data: ws }, SheetNames: ['data'] };
+    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    const dataBlob = new Blob([excelBuffer], { type: fileType });
+    saveAs(dataBlob, `Ventas-${formattedDate}${fileExtension}`);
+  };
 
-  //   const formattedData = filteredData.map((item) => {
-  //     // Assuming you have columns 'name', 'age', 'email' in your data objects
-  //     return {
-  //       Fecha: item.date,
-  //       ID: item.id,
-  //       Nombre: item.name,
-  //       Cantidad: item.quantity,
-  //       Unidad: item.unity,
-  //       Ingresos: item.customerPrice,
-  //       Ganancia: item.profit
-  //     };
-  //   });
 
-  //   const ws = XLSX.utils.json_to_sheet(formattedData);
-  //   const wb = { Sheets: { data: ws }, SheetNames: ['data'] };
-  //   const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-  //   const dataBlob = new Blob([excelBuffer], { type: fileType });
-  //   saveAs(dataBlob, `data${fileExtension}`);
-  // };
 
   useEffect(() => {
     setReports_()
+    console.log(totalSales)
   }, [])
 
   const columns = [
@@ -355,41 +359,47 @@ export const Sales = () => {
 
 
   ];
+
+
   return (
     <>
       <div
         className='inventory'
         style={{
           display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
-          flexDirection: 'column', height: 'auto', width: '80%', marginLeft: '5vh'
+          flexDirection: 'column', height: 'auto', width: 'auto',
+          // marginLeft: '5vh'
         }}>
 
+        <Row>
+          <RangePicker
+            onChange={handleDateChange}
+            style={{
+              marginBottom: '1vh', marginRight: '1vh'
+            }} />
+
+          <Button
+            icon={<FaFileDownload size={20} style={{ color: '#adc178' }} />}
+            onClick={handleDownload}
+            style={{
+              aspectRatio: '1/1'
+            }} />
 
 
-
-        <RangePicker
-          onChange={handleDateChange}
-          style={{
-            marginBottom: '1vh'
-          }} />
-
+        </Row>
 
         <div style={{
           display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-start', flexDirection: 'column',
-          width: '100%', height: 'auto'
+          width: 'auto', height: 'auto', flexWrap: 'wrap', 
         }}>
 
-          <Row style={{
-            display:'flex', alignItems:'flex-start', justifyContent:'center', flexDirection:'row',
-            flexWrap:'wrap'
-          }}>
 
-            <Table
-              style={{
-                width: '70%',
-                height: 'auto',
-                marginBottom: '1vh',
-              }}
+          <Row>
+            <Table style={{
+              width: '70%',
+              height: 'auto',
+              marginBottom: '1vh',
+            }}
               // className={}
               className={`my-table-2-`}
               columns={columns}
@@ -400,14 +410,7 @@ export const Sales = () => {
               }}
               pagination={false} />
 
-
-            <div style={{
-              width: '30%'
-            }}>
-              <Reports reports={reports} />
-
-            </div>
-
+            <Reports reports={reports} />
           </Row>
 
           <Row >
@@ -440,6 +443,7 @@ export const Sales = () => {
               value={sumProfits(filteredData)} precision={3} />
 
             <Statistic
+            className='inventory-table'
               style={{
                 width: '20vh', display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
                 flexDirection: 'column', paddingLeft: '2%', borderRadius: '2vh',

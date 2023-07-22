@@ -3,6 +3,9 @@ import React, { useContext, useEffect, useState } from 'react'
 import { ItemToSell } from './ItemToSell';
 import { appContext } from '../context/appContext';
 import { Resumen } from './Resumen';
+
+import { saveAs } from "file-saver";
+import { FaFileDownload } from "react-icons/fa";
 import { Reports } from './Reports';
 
 export const Home = () => {
@@ -17,7 +20,7 @@ export const Home = () => {
     const [simpleDate, setSimpleDate] = useState('')
     const [sales, setSales] = useState([])
     const [handleSales, setHandleSales] = useState(totalSales)
-    
+
     // const [Reports, setReports] = useState([])
 
     // useEffect(() => {
@@ -133,14 +136,47 @@ export const Home = () => {
         setSales([])
     }
 
-    
+
+
 
     useEffect(() => {
         // setReports_()
         setTotalsales(handleSales)
     }, [sales])
 
-    
+    const fieldsToPrint = [
+        { label: "Clave", key: "id" },
+        { label: "Precio", key: "customerPrice" },
+        { label: "Nombre", key: "name" },
+    ];
+
+
+    const downloadFile = () => {
+        let content = ""
+        
+        content += "-----------------------------" + "\n"
+        content += "\t" + "𝕾𝖆𝖓 𝕻𝖆𝖓𝖈𝖗𝖆𝖘𝖎𝖔" + "\n"
+        content += "-----------------------------" + "\n"
+        // const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+        const headers = fieldsToPrint.map((field) => field.label)
+        content += headers.join("  | ") + "\n"
+        content += "-----------------------------" + "\n"
+
+        sales.forEach((item) => {
+            const row = fieldsToPrint.map((field) => item[field.key])
+            content += row.join(" |  ") + ("\n")
+            content += "-----------------------------" + "\n"
+
+        })
+
+        content += `Total: $ ${sumCustomerPrices(sales).toFixed(2)}` + "\n"
+
+        const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+
+        saveAs(blob, `ticket.txt`);
+    }
+
+
 
 
     return (
@@ -152,7 +188,7 @@ export const Home = () => {
             }}>
 
             <div style={{
-                width: '80vh', height: 'auto',
+                width: '90vh', height: 'auto',
                 display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
                 flexDirection: 'column', borderRadius: '3vh', marginBottom: '0vh',
                 backgroundColor: '#dde5b6', boxShadow: '0px 5px 10px #00000040'
@@ -185,12 +221,21 @@ export const Home = () => {
 
                             <div style={{
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                width: '18%', borderRadius: '2vh', height: '5vh', backgroundColor: '#adc178'
+                                width: 'auto', borderRadius: '1vh', height: '4vh', backgroundColor: '#adc178',
+                                paddingLeft: '1%', paddingRight: '1%'
                             }}>
                                 <p style={{
-                                    fontWeight: 500, color: '#f3f3f3'
+                                    fontWeight: 500, color: '#f3f3f3',
                                 }}>{`$${sumCustomerPrices(sales).toFixed(2)}`}</p>
+
                             </div>
+
+                            <Button
+                                icon={<FaFileDownload size={20} style={{ color: '#adc178' }} />}
+                                onClick={downloadFile}
+                                style={{
+                                    aspectRatio: '1/1', marginLeft: '1vh'
+                                }} />
 
                         </div>
 
@@ -249,9 +294,6 @@ export const Home = () => {
                 </Row>
 
             </div>
-
-
-            
 
         </div>
     )

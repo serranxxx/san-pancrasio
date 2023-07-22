@@ -42,10 +42,14 @@
         display: none;
     }
 
+    .inventory-table {
+        display: none;
+    }
+
 
 }
 
-@media screen and (max-height: 700px) {
+@media screen and (max-height: 200px) {
     .content {
         height: 85vh;
         width: 98vw;
@@ -87,7 +91,7 @@
 
 }
 
-@media screen and (min-height: 701px) and (min-width: 1001px) {
+@media screen and (min-height: 201px) and (min-width: 1001px) {
     .content {
         height: 80vh;
         width: 98vw;
