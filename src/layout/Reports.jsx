@@ -68,7 +68,7 @@ export const Reports = (props) => {
                 <Table
 
                     style={{
-                        width: '25%',
+                        width: '20vw',
                         height: 'auto',
                         marginLeft:'3vh'
                     }}

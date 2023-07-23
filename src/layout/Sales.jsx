@@ -396,7 +396,7 @@ export const Sales = () => {
 
           <Row>
             <Table style={{
-              width: '70%',
+              width: '60vw',
               height: 'auto',
               marginBottom: '1vh',
             }}

@@ -1,4 +1,4 @@
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 700px) {
     .content {
         height: 85vh;
         width: 98vw;
@@ -35,7 +35,76 @@
     .middle-icon {
         margin-left: 7vh;
         margin-right: 7vh;
-        
+
+    }
+
+    .stats-icon {
+        display: none;
+    }
+
+    .icon{
+        margin-left: 1vh;
+        margin-right: 1vh;
+    }
+
+    .inventory-table {
+        display: none;
+    }
+
+    .saler-1 {
+        display: none;
+    }
+
+    .saler-2 {
+        display: flex;
+    }
+
+
+}
+
+@media screen and (min-width: 701px) and (max-width: 1000px) {
+    .content {
+        height: 85vh;
+        width: 98vw;
+        padding-top: 15vh;
+    }
+
+    .sider {
+        height: 10vh;
+        width: 88vw;
+        border-radius: 4vh;
+        flex-direction: row;
+        position: absolute;
+        top: 5vh;
+        box-shadow: 0px 7px 20px #00000050;
+        transform: translateY(0px);
+        transition: all 0.55s ease-in-out;
+
+    }
+
+    .sider:hover {
+        transform: translateY(-5px);
+        transition: all 0.55s ease-in-out;
+    }
+
+    .header {
+        height: 5vh;
+        width: 98vw;
+    }
+
+    .bar {
+        display: none;
+    }
+
+    .middle-icon {
+        margin-left: 7vh;
+        margin-right: 7vh;
+
+    }
+
+    .icon{
+        margin-left: 1vh;
+        margin-right: 1vh;
     }
 
     .stats-icon {
@@ -43,6 +112,14 @@
     }
 
     .inventory-table {
+        display: none;
+    }
+
+    .saler-1 {
+        display: flex;
+    }
+
+    .saler-2 {
         display: none;
     }
 
@@ -128,8 +205,16 @@
     }
 
     .inventory {
-        
+
         margin-left: 10vw;
+    }
+
+    .saler-1 {
+        display: flex;
+    }
+
+    .saler-2 {
+        display: none;
     }
 
 }

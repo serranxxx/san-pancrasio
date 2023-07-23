@@ -65,7 +65,7 @@ export const HomePage = () => {
 
                     <BsFillClipboardDataFill size={'5vh'}
                         onClick={() => setPosition(2)}
-                        className='middle-icon icon'
+                        className='middle-icon icon stats-icon'
                         style={{
                             color: `${position === 2 ? '#adc178' : '#f0ead2'}`, cursor: 'pointer'
                         }} />

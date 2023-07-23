@@ -153,7 +153,7 @@ export const Home = () => {
 
     const downloadFile = () => {
         let content = ""
-        
+
         content += "-----------------------------" + "\n"
         content += "\t" + "𝕾𝖆𝖓 𝕻𝖆𝖓𝖈𝖗𝖆𝖘𝖎𝖔" + "\n"
         content += "-----------------------------" + "\n"
@@ -187,12 +187,14 @@ export const Home = () => {
                 flexDirection: 'row', height: 'auto', width: '80%', flexWrap: 'wrap'
             }}>
 
-            <div style={{
-                width: '90vh', height: 'auto',
-                display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
-                flexDirection: 'column', borderRadius: '3vh', marginBottom: '0vh',
-                backgroundColor: '#dde5b6', boxShadow: '0px 5px 10px #00000040'
-            }}>
+            <div
+                className='saler-1'
+                style={{
+                    width: '50vw', height: 'auto',
+                    alignItems: 'flex-start', justifyContent: 'center',
+                    flexDirection: 'column', borderRadius: '3vh', marginBottom: '0vh',
+                    backgroundColor: '#dde5b6', boxShadow: '0px 5px 10px #00000040'
+                }}>
                 <p style={{
                     width: '80%',
                     margin: '3vh 0vh 1vh 5vh',
@@ -293,6 +295,101 @@ export const Home = () => {
 
                 </Row>
 
+            </div>
+
+            <div className='saler-2'
+                style={{
+                    alignItems: 'center', justifyContent: 'center',
+                    flexDirection: 'column'
+
+                }}
+            >
+                <p style={{
+                    width: '50%',
+                    margin: '3vh 0vh 3vh 5vh',
+                    textAlign: 'left', fontWeight: 700, color: '#6c584c',
+                    fontSize: '1.5em', fontStyle: 'italic'
+                }}>{currentDate}</p>
+
+
+
+                <Row style={{
+                    width: '70%', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                }}>
+                    <Col style={{
+                        width: '90%', height: 'auto',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        flexDirection: 'column'
+                    }}>
+                        <div style={{
+                            width: '95%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            flexDirection: 'row'
+                        }}>
+                            <ItemToSell handleValues={handleValues} />
+
+
+
+                        </div>
+
+                        <div
+
+                            style={{
+                                height: 'auto',
+                                width: '95%',
+                                display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
+                                flexDirection: 'column', padding: '2% 0% 2% 0%',
+                            }}>
+
+
+                            {
+                                sales ? <Resumen sales={sales} counter={counter_} deleteItem={deleteItem} />
+                                    : <></>
+                            }
+
+                        </div>
+
+                        <div style={{
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            width: 'auto', borderRadius: '1vh', height: '4vh', backgroundColor: '#adc178',
+                            paddingLeft: '5%', paddingRight: '5%', marginBottom:'5vh'
+                        }}>
+                            <p style={{
+                                fontWeight: 500, color: '#f3f3f3',
+                            }}>{`$${sumCustomerPrices(sales).toFixed(2)}`}</p>
+
+                        </div>
+
+                        <Row style={{
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            flexDirection: 'row', width: '90%'
+                        }}>
+                            <Button
+                                onClick={() => setSales([])}
+                                className='button'
+                                style={{
+                                    width: '30%',
+                                    backgroundColor: '#dde5b6',
+                                    color: '#adc178', border: '2px solid #adc178',
+                                    fontWeight: 500
+                                }}
+                            >Cancelar</Button>
+                            <Button
+                                onClick={onFinish}
+                                className='button'
+                                style={{
+                                    marginLeft: '2%', width: '30%',
+                                    backgroundColor: '#adc178',
+                                    border: '1.5px solid #adc178',
+                                    color: '#f3f3f3', fontWeight: 500
+                                }}>Finalizar</Button>
+                        </Row>
+
+
+
+
+                    </Col>
+
+                </Row>
             </div>
 
         </div>
