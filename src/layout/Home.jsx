@@ -193,7 +193,8 @@ export const Home = () => {
                     width: '50vw', height: 'auto',
                     alignItems: 'flex-start', justifyContent: 'center',
                     flexDirection: 'column', borderRadius: '3vh', marginBottom: '0vh',
-                    backgroundColor: '#dde5b6', boxShadow: '0px 5px 10px #00000040'
+                    backgroundColor: '#dde5b6',  border:'1.4px solid #adc178'
+                    // boxShadow: '0px 5px 10px #00000040'
                 }}>
                 <p style={{
                     width: '80%',
